@@ -2,10 +2,15 @@
 #include "Warehouse.h"
 #include "AMaterial.h"
 #include "Player.h"
+#include "Observer.h"
 
+int Observer::static_number_ = 0;
 
 int main()
 {
+
+	
+
 	try
 	{
 	Player PPlayer("Jack");

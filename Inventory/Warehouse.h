@@ -2,11 +2,12 @@
 #include <string>
 #include <unordered_map>
 #include "AMaterial.h"
+#include "Observer.h"
 
 class AMaterial;
 
 
-class Warehouse
+class Warehouse 
 {
 private:
 	static size_t mIDCounter;
@@ -23,6 +24,8 @@ public:
 	void Information();
 	void SetMaterial(AMaterial * Material);
 	AMaterial* GetMaterial(MaterialType Type, size_t Quantity);
+	std::string GetName();
+	size_t EmptyPlaces();
 	bool isEmpty();
 	bool isFull();
 	~Warehouse();

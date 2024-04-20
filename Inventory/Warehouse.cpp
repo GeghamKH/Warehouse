@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Warehouse.h"
 
-#define TemporaryCapacity 1000
+#define TemporaryCapacity 10
 
 
 size_t Warehouse::mIDCounter = 0;
@@ -34,6 +34,8 @@ void Warehouse::SetMaterial(AMaterial* Material)
 	if (mWarehouse[Material->GetType()].empty())
 	{
 		mWarehouse[Material->GetType()].push_back(Material);
+		mSize++;
+
 	}
 	else
 	{
@@ -52,6 +54,7 @@ void Warehouse::SetMaterial(AMaterial* Material)
 			TempMaterial->SetMaterial(CanBeAdd);
 			mWarehouse[Material->GetType()].push_back(new AMaterial(Material->GetType(), NewMaterial, Material->GetName() + (char)MaterialVector.size(),
 				Material->GetDescription() + (char)MaterialVector.size(), Material->GetIcon() + (char)MaterialVector.size()));
+			mSize++;
 		}
 	}
 }
@@ -78,6 +81,7 @@ AMaterial* Warehouse::GetMaterial(MaterialType Type, size_t Quantity)
 					{
 						auto LocalCopy = *mWarehouse[Type].back();
 						mWarehouse[Type].pop_back();
+						mSize--;
 						return new AMaterial(Type, Value, LocalCopy.GetName(), LocalCopy.GetDescription(), LocalCopy.GetIcon());
 					}
 					return new AMaterial(Type, Value, mWarehouse[Type].front()->GetName(), mWarehouse[Type].front()->GetDescription(), mWarehouse[Type].front()->GetIcon());
@@ -86,6 +90,7 @@ AMaterial* Warehouse::GetMaterial(MaterialType Type, size_t Quantity)
 				{
 					size_t Value = i->GetMaterial(i->GetQuantity());
 					mWarehouse[Type].pop_back();
+					mSize--;
 
 					if (mWarehouse[Type].empty())
 						throw std::string("Not enough materials"); // or return nullptr 
@@ -104,6 +109,16 @@ AMaterial* Warehouse::GetMaterial(MaterialType Type, size_t Quantity)
 	}
 	else
 		throw std::string("Warehouse is empty"); // or return nullptr 
+}
+
+std::string Warehouse::GetName()
+{
+	return mName;
+}
+
+size_t Warehouse::EmptyPlaces()
+{
+	return mCapacity - mSize;
 }
 
 
